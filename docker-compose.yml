@@ -1,0 +1,33 @@
+
+
+services:
+  extension-builder:
+    build:
+      context: .
+      no_cache: true
+    container_name: reflex-extension-builder
+    volumes:
+      # Mount source code
+      - ./src:/app/src
+      - ./assets:/app/assets
+      # Mount tests
+      - ./tests:/app/tests
+      # Mount browser-specific manifests
+      - ./manifest-chrome.json:/app/manifest-chrome.json
+      - ./manifest-firefox.json:/app/manifest-firefox.json
+      # Mount config files
+      - ./package.json:/app/package.json
+      - ./webpack.config.js:/app/webpack.config.js
+      - ./tsconfig.json:/app/tsconfig.json
+      - ./.eslintrc.js:/app/.eslintrc.js
+      # Mount build output
+      - ./dist:/app/dist
+      # Mount node_modules as a volume for persistence
+      - node_modules:/app/node_modules
+    working_dir: /app
+    command: npm run dev
+    stdin_open: true
+    tty: true
+
+volumes:
+  node_modules:
